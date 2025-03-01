@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://crp6gnilp1mnj"]
+
+[ext_resource type="PackedScene" uid="uid://k4q4vf8oym4t" path="res://cards/Card.tscn" id="1_e1yss"]
+[ext_resource type="Script" path="res://Main.gd" id="1_udp8s"]
+[ext_resource type="Script" path="res://player_info.gd" id="3_eo22r"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rf3nf"]
+font_size = 44
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_udp8s")
+
+[node name="Dungeon" type="Node2D" parent="."]
+position = Vector2(320, 105)
+metadata/_edit_lock_ = true
+
+[node name="DungeonCard0" parent="Dungeon" instance=ExtResource("1_e1yss")]
+position = Vector2(-240, 0)
+
+[node name="DungeonCard1" parent="Dungeon" instance=ExtResource("1_e1yss")]
+position = Vector2(-80, 0)
+
+[node name="DungeonCard2" parent="Dungeon" instance=ExtResource("1_e1yss")]
+position = Vector2(80, 0)
+
+[node name="DungeonCard3" parent="Dungeon" instance=ExtResource("1_e1yss")]
+position = Vector2(240, 0)
+
+[node name="Discard" parent="." instance=ExtResource("1_e1yss")]
+position = Vector2(1194, 525)
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="Discard"]
+offset_left = -71.0
+offset_top = -121.0
+offset_right = 70.0
+offset_bottom = -98.0
+text = "Discard"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="RunButton" type="Button" parent="."]
+offset_left = 648.0
+offset_top = 161.0
+offset_right = 726.0
+offset_bottom = 197.0
+text = "Run"
+
+[node name="RestartButton" type="Button" parent="."]
+offset_left = 649.0
+offset_top = 113.0
+offset_right = 727.0
+offset_bottom = 149.0
+text = "Restart
+"
+
+[node name="PlayerInfo" type="Node2D" parent="."]
+script = ExtResource("3_eo22r")
+life_total = 12
+
+[node name="Card" parent="PlayerInfo" instance=ExtResource("1_e1yss")]
+position = Vector2(91, 525)
+
+[node name="WeaponLabel" type="Label" parent="PlayerInfo"]
+offset_left = 24.0
+offset_top = 400.0
+offset_right = 160.0
+offset_bottom = 423.0
+text = "Weapon"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LifeTotalLabel" type="Label" parent="PlayerInfo"]
+offset_left = 23.0
+offset_top = 278.0
+offset_right = 515.0
+offset_bottom = 344.0
+text = "Health:"
+label_settings = SubResource("LabelSettings_rf3nf")
+vertical_alignment = 1
+
+[connection signal="reset_player" from="." to="PlayerInfo" method="_on_main_reset_player"]
+[connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
