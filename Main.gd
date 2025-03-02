@@ -1,12 +1,13 @@
 extends Node2D
 
+# global variables
 var card:PackedScene = preload("res://cards/Card.tscn")
-@onready var playerInfo:Node2D = self.get_node("PlayerInfo")
-signal reset_player
-signal change_player_life(amount: int, type: String)
-
 var CARDS_JSON : Dictionary = JSON.parse_string(FileAccess.open("cards.json", FileAccess.READ).get_as_text())
 var DAMAGE_DECODER : Dictionary = CARDS_JSON.values
+
+# signals
+signal reset_player
+signal change_player_life(amount: int, type: String)
 
 var board_state : Dictionary = {
 	"deck": [],
@@ -19,6 +20,9 @@ var game_state : Dictionary = {
 	"state": "idle",
 	"potion_used": false,
 }
+
+func on_death() -> void:
+	game_state.state = "game_over"
 
 func _on_restart_button_pressed() -> void:
 	reset_game()
@@ -61,7 +65,6 @@ func handle_enemy(clicked_card) -> void:
 
 	var damage : int = DAMAGE_DECODER[clicked_card.value]
 	var weapon_strength : int
-	var smallest_enemy_slain : int
 	var differential : int
 	
 	if board_state.weapon.size() == 0:
@@ -89,14 +92,14 @@ func handle_enemy(clicked_card) -> void:
 	sort_weapon()
 
 func sort_weapon() -> void:
-	var counter = 0
+	var counter : int = 0
 	while counter < board_state.weapon.size():
-		var current_card = board_state.weapon[counter]
+		var current_card : Card = board_state.weapon[counter]
 		current_card.position = self.get_node("PlayerInfo/Weapon").get_global_position()
-		current_card.position.x += counter*20
+		current_card.position.x += counter*30
 		current_card.z_index = counter + 1
 		counter += 1
-	
+
 func handle_card_click(clicked_card) -> void:
 	self.get_node("RunButton").disabled = true
 	board_state.dungeon.erase(clicked_card)
@@ -109,13 +112,12 @@ func handle_card_click(clicked_card) -> void:
 	if board_state.dungeon.size() == 1:
 		populate_dungeon()
 
-
 func initialize_board_state() -> void:
-	var all_cards = CARDS_JSON.cards
+	var all_cards : Array = CARDS_JSON.cards
 	all_cards.shuffle()
 	for c in all_cards:
-		var card_info = c.split(",")
-		var new_card = instantiate_new_card(card_info[0], card_info[1])
+		var card_info : Array = c.split(",")
+		var new_card : Card = instantiate_new_card(card_info[0], card_info[1])
 		self.add_child(new_card)
 		new_card.position = self.get_node("Deck").get_global_position()
 		board_state.deck.append(new_card)
@@ -133,7 +135,7 @@ func free_all_cards() -> void:
 	board_state.discard = []
 
 func flip_card(active_card):
-	var sprite = active_card.get_node("Sprite2D")
+	var sprite : Sprite2D = active_card.get_node("Sprite2D")
 	if sprite:
 		sprite.texture = load(
 			"res://assets/card{suite}{number}.png".format(
@@ -141,7 +143,7 @@ func flip_card(active_card):
 
 func populate_dungeon() -> void:
 	while board_state.dungeon.size() < 4:
-		var moving_card = board_state.deck.pop_front()
+		var moving_card : Card = board_state.deck.pop_front()
 		board_state.dungeon.append(moving_card)
 		flip_card(moving_card)
 	for index in range(0,board_state.dungeon.size()):
@@ -163,3 +165,6 @@ func _on_run_button_pressed() -> void:
 		board_state.deck.append(c)
 		board_state.dungeon.erase(c)
 	populate_dungeon()
+
+func _on_player_info_player_dead() -> void:
+	on_death()

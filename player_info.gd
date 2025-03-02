@@ -1,8 +1,9 @@
 class_name PlayerInfo extends Node2D
 
 @export var life_total: int = 20
+signal player_dead
 
-func updateHealthTotal(new_life_total): 
+func updateHealthTotal(new_life_total: int) -> void: 
 	self.life_total = new_life_total
 	self.get_node("LifeTotalLabel").text = "Health: {lifeTotal}".format({"lifeTotal": life_total})
 
@@ -20,5 +21,7 @@ func _on_main_change_player_life(amount: int, type: String) -> void:
 
 	if type == "lose":
 		life_total = life_total - amount
-		if life_total < 0: life_total = 0
+		if life_total < 0: 
+			life_total = 0
+			player_dead.emit()
 		updateHealthTotal(life_total)
