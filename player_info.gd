@@ -11,3 +11,14 @@ func _on_main_player_takes_damage(damage_amount: int) -> void:
 
 func _on_main_reset_player() -> void:
 	self.updateHealthTotal(20)
+
+func _on_main_change_player_life(amount: int, type: String) -> void:
+	if type == "gain":
+		life_total = life_total + amount
+		if life_total > 20: life_total = 20
+		updateHealthTotal(life_total)
+
+	if type == "lose":
+		life_total = life_total - amount
+		if life_total < 0: life_total = 0
+		updateHealthTotal(life_total)

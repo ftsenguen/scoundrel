@@ -12,7 +12,6 @@ script = ExtResource("1_udp8s")
 
 [node name="Dungeon" type="Node2D" parent="."]
 position = Vector2(320, 105)
-metadata/_edit_lock_ = true
 
 [node name="DungeonCard0" parent="Dungeon" instance=ExtResource("1_e1yss")]
 position = Vector2(-240, 0)
@@ -46,6 +45,7 @@ offset_left = 648.0
 offset_top = 161.0
 offset_right = 726.0
 offset_bottom = 197.0
+disabled = true
 text = "Run"
 
 [node name="RestartButton" type="Button" parent="."]
@@ -60,7 +60,7 @@ text = "Restart
 script = ExtResource("3_eo22r")
 life_total = 12
 
-[node name="Card" parent="PlayerInfo" instance=ExtResource("1_e1yss")]
+[node name="Weapon" parent="PlayerInfo" instance=ExtResource("1_e1yss")]
 position = Vector2(91, 525)
 
 [node name="WeaponLabel" type="Label" parent="PlayerInfo"]
@@ -81,5 +81,10 @@ text = "Health:"
 label_settings = SubResource("LabelSettings_rf3nf")
 vertical_alignment = 1
 
+[node name="Deck" parent="." instance=ExtResource("1_e1yss")]
+position = Vector2(1194, 105)
+
+[connection signal="change_player_life" from="." to="PlayerInfo" method="_on_main_change_player_life"]
 [connection signal="reset_player" from="." to="PlayerInfo" method="_on_main_reset_player"]
+[connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]

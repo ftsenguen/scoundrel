@@ -8,5 +8,9 @@
 		"Diamonds,9", "Diamonds,10",
 		"Hearts,2", "Hearts,3", "Hearts,4", "Hearts,5", "Hearts,6", "Hearts,7", "Hearts,8",
 		"Hearts,9", "Hearts,10"
-		]
+		],
+	"values": {
+		"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
+		"J": 11, "Q":12, "K": 13, "A": 14
+	}
 }
