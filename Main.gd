@@ -141,6 +141,11 @@ func flip_card(active_card):
 			"res://assets/card{suite}{number}.png".format(
 				{"suite": active_card.suite, "number": active_card.value}))
 
+func unflip_card(active_card):
+	var sprite : Sprite2D = active_card.get_node("Sprite2D")
+	if sprite:
+		sprite.texture = load("res://assets/cardBack_blue1.png")
+
 func populate_dungeon() -> void:
 	while board_state.dungeon.size() < 4:
 		var moving_card : Card = board_state.deck.pop_front()
@@ -161,9 +166,12 @@ func reset_game() -> void:
 
 func _on_run_button_pressed() -> void:
 	self.get_node("RunButton").disabled = true
-	for c in board_state.dungeon:
+	for c : Card in board_state.dungeon:
 		board_state.deck.append(c)
 		board_state.dungeon.erase(c)
+		unflip_card(c)
+		c.position = self.get_node("Deck").position
+		c.get_node("CardArea2D").input_pickable = false
 	populate_dungeon()
 
 func _on_player_info_player_dead() -> void:
