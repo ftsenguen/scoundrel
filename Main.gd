@@ -37,9 +37,10 @@ func reset_game() -> void:
 	draw_board()
 
 func free_all_cards() -> void:
-	for c : Card in game_state.live_cards:
+	while game_state.live_cards.size() > 0:
+		var c : Card = game_state.live_cards.pop_back()
 		c.queue_free()
-	game_state.live_cards = []
+
 
 func initialize_board_state() -> void:
 	splash.visible = false
@@ -181,7 +182,7 @@ func _on_run_button_pressed() -> void:
 	self.get_node("RunButton").disabled = true
 	for c : Dictionary in game_state.dungeon:
 		game_state.deck.append(c)
-		game_state.dungeon.erase(c)
+	game_state.dungeon = []
 	populate_dungeon()
 	draw_board()
 
