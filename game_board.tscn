@@ -10,6 +10,26 @@ font_size = 44
 [node name="Main" type="Node2D"]
 script = ExtResource("1_udp8s")
 
+[node name="Splash" type="VBoxContainer" parent="."]
+self_modulate = Color(1, 0.521569, 1, 1)
+top_level = true
+z_index = 180
+offset_left = 640.0
+offset_top = 320.0
+offset_right = 740.0
+offset_bottom = 378.0
+alignment = 1
+
+[node name="Label" type="Label" parent="Splash"]
+layout_mode = 2
+text = "Welcome
+"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="Splash"]
+layout_mode = 2
+text = "Restart"
+
 [node name="Dungeon" type="Node2D" parent="."]
 position = Vector2(320, 105)
 
@@ -86,6 +106,7 @@ position = Vector2(1194, 105)
 
 [connection signal="change_player_life" from="." to="PlayerInfo" method="_on_main_change_player_life"]
 [connection signal="reset_player" from="." to="PlayerInfo" method="_on_main_reset_player"]
+[connection signal="pressed" from="Splash/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="player_dead" from="PlayerInfo" to="." method="_on_player_info_player_dead"]
